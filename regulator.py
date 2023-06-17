@@ -26,7 +26,7 @@ class DifferentialRegulator:
         calculate raising time
         :return: raising time
         """
-        return (self.temp_max - self.temp_min) * self.derivative()
+        return (self.temp_max - self.temp_min) / self.derivative()
 
     def regulate(self):
         """
@@ -43,11 +43,14 @@ class DifferentialRegulator:
 if __name__ == "__main__":
     regulator = DifferentialRegulator(100, 90)
 
-    with open("input.txt", "r") as fo:
-        lines = fo.readlines()[1:]
-        for i, line in enumerate(lines):
-            _, temperature1 = line.strip().split(";")
-            regulator.time1, regulator.temp1 = i + 1, float(temperature1)
-            print(regulator.regulate())
+    fr = open("f5.txt", "r")
+    fw = open("f6.txt", "w+")
+    lines = fr.readlines()[1:]
+    for i, line in enumerate(lines):
+        _, temperature1 = line.strip().split(";")
+        regulator.time1, regulator.temp1 = i + 1, float(temperature1)
+        res = regulator.regulate()
+        if res:
+            fw.write(str(regulator.time1)+"\n")
 
-            regulator.time0, regulator.temp0 = regulator.time1, regulator.temp1
+        regulator.time0, regulator.temp0 = regulator.time1, regulator.temp1

@@ -18,3 +18,8 @@ the minimum ammount goals by the intergral of the power by the time. dispersion 
 1000 +- 100 celsius.
 
 unite the system in the localhost.
+
+
+f5 - input 
+
+f6 - ouput
