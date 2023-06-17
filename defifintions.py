@@ -1,1 +1,0 @@
-COEFFICIENT = 0.1
