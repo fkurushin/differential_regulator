@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 class DifferentialRegulator:
-    COEFFICIENT = 10
+    COEFFICIENT = 0.1
 
     def __init__(self, temp_max, temp_min, time0=0, temp0=0, time1=None, temp1=None):
         """
@@ -11,8 +11,7 @@ class DifferentialRegulator:
         :param time1: time of the end
         :param temp1: temperature of the end
         """
-        self.temp_max = temp_max
-        self.temp_min = temp_min
+        self.temp_delta = temp_max - temp_min
         self.temp1 = temp1
         self.temp0 = temp0
         self.time1 = time1
@@ -25,27 +24,20 @@ class DifferentialRegulator:
         """
         return (self.temp1 - self.temp0) / (self.time1 - self.time0)
 
-    def raising_time(self):
-        """
-        calculate raising time
-        :return: raising time
-        """
-        return (self.temp_max - self.temp_min) / self.derivative()
-
     def regulate(self):
         """
         the raising time should be bigget tha the dt by the ten times
         it defines by the COEFFICIENT from the defintions
         :return: the 0 if everything is OK, 1 if refrigerator must be switched on
         """
-        if self.raising_time() > self.COEFFICIENT * (self.time1 - self.time0):
-            return 0
-        else:
+        if abs(self.derivative()) > self.COEFFICIENT * self.temp_delta / (self.time1 - self.time0):
             return 1
+        else:
+            return 0
 
 
 def exp_test():
-    T_max = 1100
+    T_max = 1000
     T_min = 900
     fi = open("tests/f5exp.txt", "r")
     fo = open("tests/f6exp.txt", "w+")
@@ -152,10 +144,11 @@ def sin_test1():
     fig.tight_layout()
     plt.show()
 
+
 def sin_test2():
     fi = open("tests/f5sin.txt", "r")
     fo = open("tests/f6sin.txt", "w+")
-    T_max = 1500
+    T_max = 500
     T_min = 300
     regulator = DifferentialRegulator(T_max, T_min)
 
@@ -206,8 +199,13 @@ def sin_test2():
 
 
 if __name__ == "__main__":
+    # пример вызова:
     # regulator = DifferentialRegulator(100, 90)
-    #
+    # regulator.time0 = 0.00036331844427417437;
+    # regulator.temp0 = 300.18165921814057
+    # regulator.time1 = 0.0007488687355783341;
+    # regulator.temp1 = 300.37443433279174
+    # print(regulator.regulate())
     # fr = open("f5.txt", "r")
     # fw = open("f6.txt", "w+")
     # lines = fr.readlines()[1:]
@@ -219,6 +217,6 @@ if __name__ == "__main__":
     #         fw.write(str(regulator.time1)+"\n")
     #
     #     regulator.time0, regulator.temp0 = regulator.time1, regulator.temp1
-    # exp_test()
+    exp_test()
     # sin_test1()
-    sin_test2()
+    # sin_test2()
