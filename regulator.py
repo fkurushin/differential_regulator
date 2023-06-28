@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 class DifferentialRegulator:
@@ -31,9 +32,9 @@ class DifferentialRegulator:
         :return: the 0 if everything is OK, 1 if refrigerator must be switched on
         """
         if abs(self.derivative()) > self.COEFFICIENT * self.temp_delta / (self.time1 - self.time0):
-            return 1
-        else:
-            return 0
+            return f"{datetime.now().strftime('%m.%d.%Y %H:%M:%S.%f')};1"
+        # else:
+        #     return datetime.now()
 
 
 def exp_test():
@@ -200,12 +201,12 @@ def sin_test2():
 
 if __name__ == "__main__":
     # пример вызова:
-    # regulator = DifferentialRegulator(100, 90)
-    # regulator.time0 = 0.00036331844427417437;
-    # regulator.temp0 = 300.18165921814057
-    # regulator.time1 = 0.0007488687355783341;
-    # regulator.temp1 = 300.37443433279174
-    # print(regulator.regulate())
+    regulator = DifferentialRegulator(100, 90)
+    regulator.time0 = 0.00036331844427417437
+    regulator.temp0 = 300.18165921814057
+    regulator.time1 = 0.0007488687355783341
+    regulator.temp1 = 300.37443433279174
+    print(regulator.regulate())
     # fr = open("f5.txt", "r")
     # fw = open("f6.txt", "w+")
     # lines = fr.readlines()[1:]
@@ -217,6 +218,6 @@ if __name__ == "__main__":
     #         fw.write(str(regulator.time1)+"\n")
     #
     #     regulator.time0, regulator.temp0 = regulator.time1, regulator.temp1
-    exp_test()
+    # exp_test()
     # sin_test1()
     # sin_test2()
